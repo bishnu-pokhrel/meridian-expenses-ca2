@@ -1,0 +1,28 @@
+{
+  "name": "meridian-expenses",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Meridian Expenses (Node.js/Express) - CA2 automated security testing pipeline. Remediated CA1 build with a claim-approval workflow.",
+  "main": "server.js",
+  "scripts": {
+    "seed": "node seed.js",
+    "start": "node server.js",
+    "test": "jest",
+    "test:security": "jest tests/security",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.3.0",
+    "cookie-parser": "^1.4.6",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "eslint-plugin-security": "^3.0.0",
+    "jest": "^29.0.0",
+    "supertest": "^7.0.0"
+  }
+}
