@@ -76,7 +76,7 @@ app.post('/login', (req, res) => {
 app.get('/logout', (req, res) => { res.clearCookie('token'); res.redirect('/login'); });
 
 app.get('/claim/:id', requireAuth, (req, res) => {
-  const row = db.prepare('SELECT * FROM claims WHERE id = ?').get(req.params.id);
+    const row = db.prepare(`SELECT * FROM claims WHERE id = ${req.params.id}`).get();
   if (!row) return res.status(404).send('Not found');
   // FIX 4 - own claim only (finance/admin can see all). a valid id isn't enough
   // on its own now, which is the IDOR gone
