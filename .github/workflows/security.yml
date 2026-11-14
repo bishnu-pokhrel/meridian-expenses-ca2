@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read           # least-privilege job token (CVE-2025-30066 lesson)
+  pull-requests: read      # Gitleaks reads the PR commit list on pull_request events
 
 jobs:
   security:
