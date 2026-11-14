@@ -98,9 +98,6 @@ app.post('/claim/new', requireAuth, (req, res) => {
 app.post('/claim/:id/approve', requireAuth, requireRole('finance', 'admin'), (req, res) => {
   const row = db.prepare('SELECT * FROM claims WHERE id = ?').get(req.params.id);
   if (!row) return res.status(404).send('Not found');
-  if (row.user_id === req.user.uid) {
-    return res.status(403).send('You cannot approve your own claim');   // CWE-841 - no self-approval
-  }
   if (row.status !== 'pending') return res.status(409).send('Claim is not pending');
   db.prepare("UPDATE claims SET status = 'approved', approver_id = ? WHERE id = ?")
     .run(req.user.uid, req.params.id);
