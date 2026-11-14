@@ -1,0 +1,52 @@
+name: security
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"   # weekly Monday 06:00 UTC: new advisories arrive without a code change
+
+permissions:
+  contents: read           # least-privilege job token (CVE-2025-30066 lesson)
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history for secret scanning)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          fetch-depth: 0
+
+      - name: Secrets - Gitleaks (any finding fails)
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7  # v2.3.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # v4.4.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies (from the lockfile)
+        run: npm ci
+
+      - name: SAST - ESLint security (errors fail, warnings do not)
+        run: npx eslint .
+
+      - name: SAST - Semgrep (ERROR severity fails)
+        run: |
+          pipx install semgrep
+          semgrep scan --error --severity ERROR --config p/javascript --config semgrep/rules
+
+      - name: SCA - audit-ci (high/critical in runtime deps fail)
+        run: npx audit-ci --config audit-ci.json
+
+      - name: Supply chain - verify package signatures (report only)
+        continue-on-error: true   # informational: not every transitive dep publishes a registry signature yet
+        run: npm audit signatures
+
+      - name: Custom security tests (access control + workflow integrity)
+        run: npx jest tests/security

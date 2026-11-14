@@ -1,0 +1,15 @@
+rules:
+  - id: no-string-built-sql
+    languages: [javascript]
+    severity: ERROR
+    message: >-
+      SQL built from a template literal with interpolation. Interpolating values into
+      the SQL text re-opens SQL injection (CWE-89). Use a parameterised query with ?
+      placeholders and bound values instead.
+    metadata:
+      cwe: "CWE-89"
+      owasp: "A03:2021 Injection"
+      references:
+        - https://cwe.mitre.org/data/definitions/89.html
+    patterns:
+      - pattern: $DB.prepare(`...${...}...`)
