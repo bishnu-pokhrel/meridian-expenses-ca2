@@ -17,7 +17,8 @@
     "cookie-parser": "^1.4.6",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "audit-ci": "^7.1.0",
