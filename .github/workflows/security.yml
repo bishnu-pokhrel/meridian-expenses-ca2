@@ -42,6 +42,11 @@ jobs:
           pipx install semgrep
           semgrep scan --error --severity ERROR --config p/javascript --config semgrep/rules
 
+      - name: SAST - Semgrep warnings (report only)
+        if: always()
+        continue-on-error: true   # report-only: surfaces warning-level findings the error-only gate does not block
+        run: semgrep scan --severity WARNING --config p/javascript --config semgrep/rules
+
       - name: SCA - audit-ci (high/critical in runtime deps fail)
         run: npx audit-ci --config audit-ci.json
 
