@@ -78,11 +78,6 @@ app.get('/logout', (req, res) => { res.clearCookie('token'); res.redirect('/logi
 app.get('/claim/:id', requireAuth, (req, res) => {
   const row = db.prepare('SELECT * FROM claims WHERE id = ?').get(req.params.id);
   if (!row) return res.status(404).send('Not found');
-  // FIX 4 - own claim only (finance/admin can see all). a valid id isn't enough
-  // on its own now, which is the IDOR gone
-  if (row.user_id !== req.user.uid && !['finance', 'admin'].includes(req.user.role)) {
-    return res.status(403).send('Forbidden');
-  }
   res.render('claim', { c: row, user: req.user });
 });
 
