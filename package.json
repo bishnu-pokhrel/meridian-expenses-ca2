@@ -7,7 +7,7 @@
   "scripts": {
     "seed": "node seed.js",
     "start": "node server.js",
-    "test": "jest",
+    "test": "jest --runInBand",
     "test:security": "jest tests/security",
     "lint": "eslint ."
   },
