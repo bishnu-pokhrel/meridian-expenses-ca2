@@ -8,7 +8,7 @@
     "seed": "node seed.js",
     "start": "node server.js",
     "test": "jest --runInBand",
-    "test:security": "jest tests/security",
+    "test:security": "jest --runInBand tests/security",
     "lint": "eslint ."
   },
   "dependencies": {
